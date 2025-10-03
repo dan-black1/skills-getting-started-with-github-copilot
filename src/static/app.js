@@ -21,30 +21,51 @@ document.addEventListener("DOMContentLoaded", () => {
         const activityCard = document.createElement("div");
         activityCard.className = "activity-card";
 
-        const spotsLeft = details.max_participants - details.participants.length;
+        const title = document.createElement("h4");
+        title.textContent = name;
 
-        // Build participants section
-        let participantsHTML = '';
+        const desc = document.createElement("p");
+        desc.textContent = details.description || "";
+
+        const schedule = document.createElement("p");
+        schedule.innerHTML = `<strong>Schedule:</strong> `;
+        schedule.appendChild(document.createTextNode(details.schedule || ""));
+
+        const spotsLeft = details.max_participants - (Array.isArray(details.participants) ? details.participants.length : 0);
+        const availability = document.createElement("p");
+        availability.innerHTML = `<strong>Availability:</strong> ${spotsLeft} spots left`;
+
+        // Build participants section using DOM APIs (avoid innerHTML)
+        const participantsDiv = document.createElement("div");
+        participantsDiv.className = "participants";
+        const participantsHeading = document.createElement("h5");
+        participantsHeading.textContent = "Participants";
+        participantsDiv.appendChild(participantsHeading);
+
         if (Array.isArray(details.participants) && details.participants.length > 0) {
-          participantsHTML += '<div class="participants">';
-          participantsHTML += '<h5>Participants</h5>';
-          participantsHTML += '<ul>';
+          const ul = document.createElement("ul");
           details.participants.forEach((p) => {
-            // Render participant as a badge + text for readability
-            participantsHTML += `<li><span class="participant-badge">${escapeHtml(p)}</span></li>`;
+            const li = document.createElement("li");
+            const badge = document.createElement("span");
+            badge.className = "participant-badge";
+            badge.textContent = p;
+            li.appendChild(badge);
+            ul.appendChild(li);
           });
-          participantsHTML += '</ul></div>';
+          participantsDiv.appendChild(ul);
         } else {
-          participantsHTML += '<div class="participants"><h5>Participants</h5><p class="no-participants">No participants yet</p></div>';
+          const noPart = document.createElement("p");
+          noPart.className = "no-participants";
+          noPart.textContent = "No participants yet";
+          participantsDiv.appendChild(noPart);
         }
 
-        activityCard.innerHTML = `
-          <h4>${escapeHtml(name)}</h4>
-          <p>${escapeHtml(details.description)}</p>
-          <p><strong>Schedule:</strong> ${escapeHtml(details.schedule)}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-          ${participantsHTML}
-        `;
+        // Append pieces to card
+        activityCard.appendChild(title);
+        activityCard.appendChild(desc);
+        activityCard.appendChild(schedule);
+        activityCard.appendChild(availability);
+        activityCard.appendChild(participantsDiv);
 
         activitiesList.appendChild(activityCard);
 

@@ -90,7 +90,9 @@ section h3 {
 
 .participants ul {
   list-style: disc;
-  padding-left: 20px;
+  list-style-type: disc;
+  list-style-position: outside; /* make sure marker is visible */
+  padding-left: 24px; /* explicit left padding for marker space */
   margin: 0;
 }
 
