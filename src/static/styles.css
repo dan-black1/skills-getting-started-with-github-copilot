@@ -96,13 +96,17 @@ section h3 {
 
 .participants li {
   margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  /* keep the element as a list item so the bullet/marker is visible */
+  display: list-item;
+  /* keep a little spacing between the marker and content */
+  padding-left: 6px;
 }
 
-/* Small pill-style badge for participant identifier (email/name) */
+/* ensure the badge looks good inline with the text */
 .participant-badge {
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
   background-color: #e8eaf6;
   color: #1a237e;
   padding: 4px 8px;
